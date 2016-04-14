@@ -66,10 +66,19 @@ module.exports = yeoman.Base.extend({
           this.directory('client_l18n', 'client');
           this.directory('views_l18n', 'views');
       }
+      if (this.props.useCms){
+          this.directory('client_cms', 'client');
+      }
 
       this.fs.copyTpl(
           this.templatePath('variables.less'),
           this.destinationPath('client/variables.less'),
+          this.props
+      );
+
+      this.fs.copyTpl(
+          this.templatePath('base.jade'),
+          this.destinationPath('views/base.jade'),
           this.props
       );
       this.fs.copy(

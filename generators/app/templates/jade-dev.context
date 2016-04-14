@@ -1,4 +1,7 @@
 {
+    <% if (useCms){ %>
+    "$cmsDbBucket": "db",
+    <% } %>
     "$isDevPlatform": true,
     "$PLATFORM":"dev",
     "$LOCALE":"en"

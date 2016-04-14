@@ -9,6 +9,18 @@ html
 		if $isDevPlatform
 			link(rel="stylesheet/less", type="text/css", href="/client/style.less")
 			script(src="/bower_components/less.js/dist/less.min.js")
+		
+		<% if (useCms) { %>
+		script
+			if $isDevPlatform
+				| var CMS_URL = 'localhost:3000';
+			else
+				| var CMS_URL = 'bla-bla.com';
+			| var CMS_DB_BUCKET = '#{$cmsDbBucket}';
+		
+		script(src="/client/cms_lib/lb-services.js")
+		<% } %>
+
 
 		block app_js
 
