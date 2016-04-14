@@ -72,6 +72,10 @@ module.exports = yeoman.Base.extend({
           this.destinationPath('client/variables.less'),
           this.props
       );
+      this.fs.copy(
+          this.templatePath('gitignore'),
+          this.destinationPath('.gitignore')
+      );
 
 
       var files = ['jade-dev.context', 'Makefile', 'requirements.python.txt', 'server.py',
