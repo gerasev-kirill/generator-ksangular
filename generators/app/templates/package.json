@@ -1,0 +1,17 @@
+{
+  "name": "<%= projectName %>",
+  "version": "1.0.0",
+  "main": "",
+  "scripts": {
+    "grunt": "grunt"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "description": "<%= projectName %>"
+}

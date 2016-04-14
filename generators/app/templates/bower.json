@@ -1,0 +1,40 @@
+{
+    "name": "<%= projectName %>",
+    "version": "1.0.0",
+    "authors": [
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+    },
+    "overrides": {
+        "bootstrap": {
+            "main": [
+                <% if (!overrideBootstrapVars) {%>
+                "dist/css/bootstrap.css",
+                <% } %>
+                "less/bootstrap.less"
+            ]
+        },
+        "jquery": {
+            "main": []
+        },
+        "world-flags-sprite": {
+            "main": [
+                "stylesheets/flags32.css",
+                "stylesheets/flags16.css"
+            ]
+        },
+        "less.js":{
+            "main":[]
+        }
+    },
+    "devDependencies": {
+    }
+}
