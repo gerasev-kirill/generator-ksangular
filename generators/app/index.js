@@ -79,7 +79,7 @@ module.exports = yeoman.Base.extend({
 
 
       var files = ['jade-dev.context', 'Makefile', 'requirements.python.txt', 'server.py',
-                    'package.json', 'bower.json', 'Gruntfile.coffee', '.gitignore'];
+                    'package.json', 'bower.json', 'Gruntfile.coffee'];
 
       for(var i=0; i<files.length; i++){
           this.fs.copyTpl(
