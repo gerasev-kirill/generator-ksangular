@@ -110,10 +110,10 @@ module.exports = yeoman.Base.extend({
 
 
       this.bowerInstall(['angular-bootstrap', 'bootstrap',
-                         'angular-ui-router'],
+                         'angular-ui-router', 'angular-animate'],
                          {'save':true});
 
-      this.bowerInstall(['less.js'], {'saveDev':true});
+      //this.bowerInstall(['less.js'], {'saveDev':true});
 
       if (this.props.useL18n){
           this.npmInstall(['grunt-angular-gettext'],
@@ -132,6 +132,7 @@ module.exports = yeoman.Base.extend({
   end: function(){
 
       this.spawnCommand('grunt', ['wiredep']);
+      this.spawnCommand('grunt', ['less:prod']);
       if (this.props.useL18n){
           this.spawnCommand('grunt', ['po']);
       }

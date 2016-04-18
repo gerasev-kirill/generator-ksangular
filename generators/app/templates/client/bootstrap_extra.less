@@ -1,0 +1,39 @@
+._btn-outline(@color){
+    background: transparent;
+    border-color: @color;
+    color: @color;
+    #default-animation;
+    &:hover, &:active, &.active, &:focus{
+        background-color: @color;
+        color: contrast(@color);
+    }
+}
+
+
+.btn-default-outline{
+    ._btn-outline(@btn-default-bg);
+}
+
+.btn-primary-outline{
+    ._btn-outline(@btn-primary-bg);
+}
+
+.btn-success-outline{
+    ._btn-outline(@btn-success-bg);
+}
+
+.btn-info-outline{
+    ._btn-outline(@btn-info-bg);
+}
+
+.btn-warning-outline{
+    ._btn-outline(@btn-warning-bg);
+}
+
+.btn-danger-outline{
+    ._btn-outline(@btn-danger-bg);
+}
+
+.btn-gray-outline{
+    ._btn-outline(@gray-dark);
+}

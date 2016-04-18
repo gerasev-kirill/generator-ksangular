@@ -6,10 +6,8 @@ html
 		// endbower
 		// bower:css
 		// endbower
-		if $isDevPlatform
-			link(rel="stylesheet/less", type="text/css", href="/client/style.less")
-			script(src="/bower_components/less.js/dist/less.min.js")
-		
+		link(rel="stylesheet", type="text/css", href="/client/style.css")
+
 		<% if (useCms) { %>
 		script
 			if $isDevPlatform

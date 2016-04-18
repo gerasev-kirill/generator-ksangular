@@ -1,5 +1,5 @@
 (function() {
-  angular.module('IndexApp', ['gettext', 'ui.bootstrap', 'ui.gettext.langPicker', 'ui.router']).run(function(gettextCatalog, $langPickerConf) {
+  angular.module('IndexApp', ['gettext', 'ui.bootstrap', 'ui.gettext.langPicker', 'ui.router', 'ngAnimate']).run(function(gettextCatalog, $langPickerConf) {
     $langPickerConf.setLanguageList({
       ru: 'Русский',
       en: 'English'

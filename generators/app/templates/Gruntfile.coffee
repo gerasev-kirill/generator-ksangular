@@ -18,12 +18,11 @@ module.exports = (grunt)->
 		replace: {
 			options:{},
 			files:{
-				expand: true,
-				cwd: 'client',
-				src: ['**/*.js'],
-				dest: 'client',
-				ext: '.js'
-			}
+					expand: true,
+					cwd: 'client',
+					src: ['**/*.js', '**/*.html'],
+					dest: 'client',
+				}
 		},
 		tags: {
 			build: {
@@ -38,15 +37,19 @@ module.exports = (grunt)->
 		},
 		less_imports:{
 				options:{},
-				so:{
+				client:{
 					src: [ 'client/*_app/**/style.less'],
 					dest: 'client/auto_imports.less'
 				}
 		},
 		watch:{
-			scripts:{
-				files: ['client/*_app/**/*.js', 'client/*_app/**/*.less' ],
-				tasks: ['replace', 'less_imports', 'tags']
+			js_html:{
+				files: ['client/*_app/**/*.js', 'client/*_app/**/*.html' ],
+				tasks: ['replace', 'tags']
+			},
+			css:{
+				files: ['client/*_app/**/*.less', 'client/*.less' ],
+				tasks: ['less_imports', 'less:prod']
 			}
 		},
 		coffee:{
@@ -94,9 +97,9 @@ module.exports = (grunt)->
 					compress:true
 				},
 				files:{
-					'client/css/style.css':'client/style.less',
-					'client/css/style-admin.css':'client/style-admin.less',
-					'client/css/style-moderator.css':'client/style-moderator.less'
+					'client/style.css':'client/style.less',
+					#'client/style-admin.css':'client/style-admin.less',
+					#'client/style-moderator.css':'client/style-moderator.less'
 				}
 			}
 		}
@@ -167,4 +170,5 @@ module.exports = (grunt)->
 	<% } %>
 
 	grunt.registerTask 'default', 'simple-watch'
-	grunt.registerTask 'index_app', ['less_imports', 'less:prod', 'replace', 'concat:index_app']
+	grunt.registerTask 'index_app', ['less_imports', 'less:prod', 'replace',
+									 'concat:index_app']
