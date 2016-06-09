@@ -5,7 +5,7 @@
       en: 'English'
     });
     return $langPickerConf.setLanguageRemoteUrl("/client/languages/");
-  }).controller('Ctrl', function($scope, $langPickerConf) {
+  }).controller('BodyCtrl', function($scope, $langPickerConf) {
     $scope.count = 1;
     $scope.$langPickerConf = $langPickerConf;
     $scope.LANG = '';
@@ -16,13 +16,13 @@
     return {
       restrict: 'E',
       controller: function($scope) {},
-      templateUrl: "/client/index_app/hello.html"
+      templateUrl: "/@@__SOURCE_PATH__/hello.html"
     };
   }).directive('hello2', function() {
     return {
       restrict: 'E',
       controller: function($scope) {},
-      templateUrl: "/client/index_app/hello2.html"
+      templateUrl: "/@@__SOURCE_PATH__/hello2.html"
     };
   }).config(function($locationProvider, $stateProvider, $urlRouterProvider) {
     $locationProvider.html5Mode(true);

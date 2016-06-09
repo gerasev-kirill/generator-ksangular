@@ -1,5 +1,8 @@
 module.exports = (grunt)->
-	index_app = ['helpers_app', 'index_app']
+	index_app = [
+				'helpers_app',
+				'index_app'
+			]
 
 	generateFilePattern = (dirs)->
 		list=[]
@@ -10,6 +13,47 @@ module.exports = (grunt)->
 			list.push('client/'+d+"/**/module*.js")
 			list.push('client/'+d+"/**/!(module*)*.js")
 		list
+
+	generateBowerLibsList = ()->
+		wiredep = require('wiredep')({
+			src: 'views/base.jade',
+			ignorePath: '..'
+		})
+		path = require('path')
+
+		bower_libs = []
+		for j in wiredep.js
+			j = j.replace(__dirname, '')
+			j = j[1...]
+			f = path.parse(j)
+			if f.ext == '.min.js'
+				bower_libs.push(j)
+				continue
+			bower_libs.push(
+				path.join(f.dir, f.name+'.min.js')
+			)
+		bower_libs
+
+	generateBowerCssList = ()->
+		wiredep = require('wiredep')({
+			src: 'views/base.jade',
+			ignorePath: '..'
+		})
+		path = require('path')
+		bower_css = []
+		for j in wiredep.css
+			j = j.replace(__dirname, '')
+			j = j[1...]
+			f = path.parse(j)
+			if f.ext == '.css.min'
+				bower_libs.push(j)
+				continue
+			bower_css.push(
+				path.join(f.dir, f.name+'.min.css')
+			)
+
+		bower_css
+
 
 
 
@@ -44,12 +88,12 @@ module.exports = (grunt)->
 		},
 		watch:{
 			js_html:{
-				files: ['client/*_app/**/*.js', 'client/*_app/**/*.html' ],
-				tasks: ['replace', 'tags']
+					files: ['client/*_app/**/*.js', 'client/*_app/**/*.html' ],
+					tasks: ['replace', 'tags']
 			},
 			css:{
-				files: ['client/*_app/**/*.less', 'client/*.less' ],
-				tasks: ['less_imports', 'less:prod']
+					files: ['client/*_app/**/*.less', 'client/*.less' ],
+					tasks: ['less_imports', 'less:prod']
 			}
 		},
 		coffee:{
@@ -64,6 +108,21 @@ module.exports = (grunt)->
 		# pug == jade templates
 		pug:{
 			views:{
+				options:{
+					data: grunt.file.readJSON('./jade-dev.context')
+				}
+				files: [{
+					expand: true,
+					cwd: 'views',
+					src: ['**/**/*.jade'],
+					dest: 'views',
+					ext: '.html'
+				}]
+			},
+			views_prod:{
+				options:{
+					data: grunt.file.readJSON('./jade-prod.context')
+				}
 				files: [{
 					expand: true,
 					cwd: 'views',
@@ -89,17 +148,21 @@ module.exports = (grunt)->
 			index_app:{
 				src: generateFilePattern(index_app)
 				dest:'client/index_app.js'
+			},
+			bower_js_libs:{
+				src: generateBowerLibsList(),
+				dest: 'client/bower_libs.min.js'
 			}
 		}
 		less:{
 			prod:{
 				options:{
-					compress:true
+					#compress:true
 				},
 				files:{
-					'client/style.css':'client/style.less',
-					#'client/style-admin.css':'client/style-admin.less',
-					#'client/style-moderator.css':'client/style-moderator.less'
+					'client/site.css':'client/site.less',
+					#'client/css/style-admin.css':'client/style-admin.less',
+					#'client/css/style-moderator.css':'client/style-moderator.less'
 				}
 			}
 		}
@@ -127,7 +190,7 @@ module.exports = (grunt)->
 				}
 			}
 		},
-		<% if (useL18n){ %>
+
 		nggettext_extract: {
 			pot: {
 				files: {
@@ -152,7 +215,73 @@ module.exports = (grunt)->
 				]
 			}
 		},
-		<% } %>
+		angular_template_inline_js: {
+			options:{
+				basePath: __dirname
+			},
+			files:{
+				cwd: 'client',
+				expand: true,
+				src: ['index_app.js'],
+				dest: 'client'
+			}
+		},
+		ngAnnotate: {
+			files:{
+				cwd: 'client',
+				expand: true,
+				src: ['*.js'],
+				dest: 'client'
+			}
+		},
+		uglify:{
+			all:{
+				files:{
+					'client/index_app.min.js':['client/index_app.js']
+				}
+			}
+		},
+		cssmin:{
+			all:{
+				files:{
+					'client/style.min.css': [
+						'client/site.css'
+					]
+				}
+			}
+		},
+		compress:{
+			css:{
+				options:{
+					mode:'gzip'
+				}
+				expand: true,
+				cwd: '__build__/',
+				src: ['**/*.min.css'],
+				dest: '__build__/',
+				ext: '.min.css.gz'
+			},
+			js:{
+				options:{
+					mode:'gzip'
+				}
+				expand: true,
+				cwd: '__build__/',
+				src: ['**/*.min.js'],
+				dest: '__build__/',
+				ext: '.min.js.gz'
+			},
+			html:{
+				options:{
+					mode:'gzip'
+				}
+				expand: true,
+				cwd: '__build__/',
+				src: ['**/*.html'],
+				dest: '__build__/',
+				ext: '.html.gz'
+			},
+		}
 	}
 	grunt.loadNpmTasks 'grunt-contrib-connect'
 	grunt.loadNpmTasks 'grunt-script-link-tags'
@@ -163,12 +292,26 @@ module.exports = (grunt)->
 	grunt.loadNpmTasks 'grunt-simple-watch'
 	grunt.loadNpmTasks 'grunt-less-imports'
 	grunt.loadNpmTasks 'grunt-contrib-pug'
-	<% if (useL18n){ %>
+	grunt.loadNpmTasks 'grunt-angular-template-inline-js'
+	grunt.loadNpmTasks 'grunt-contrib-uglify'
+	grunt.loadNpmTasks 'grunt-ng-annotate'
+	grunt.loadNpmTasks 'grunt-contrib-cssmin'
+	grunt.loadNpmTasks 'grunt-contrib-compress'
+
 	grunt.loadNpmTasks 'grunt-angular-gettext'
 	grunt.registerTask 'po', ['pug:views', 'pug:client', 'nggettext_extract']
 	grunt.registerTask 'po-compile', 'nggettext_compile:lazy'
-	<% } %>
+
 
 	grunt.registerTask 'default', 'simple-watch'
-	grunt.registerTask 'index_app', ['less_imports', 'less:prod', 'replace',
-									 'concat:index_app']
+	grunt.registerTask 'index_app', [
+				'less_imports', 'less:prod',
+				'replace', 'concat:index_app', 'ngAnnotate',
+				'angular_template_inline_js', 'uglify:all',
+				'concat:bower_js_libs',
+				'cssmin'
+	]
+
+	grunt.registerTask 'build-deploy', [
+				'index_app', 'pug:views_prod'
+	]

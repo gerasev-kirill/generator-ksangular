@@ -1,0 +1,10 @@
+{
+    "$isDevPlatform": false,
+    "$PLATFORM":"prod",
+    "$LOCALE":"en",
+    "CMS_BASE_URL": "http://localhost:3000",
+    "CMS_STORAGE":{
+        "type": "amazon",
+        "server": "https://s3.amazonaws.com"
+    }
+}

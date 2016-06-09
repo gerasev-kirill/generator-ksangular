@@ -10,10 +10,13 @@ import sys
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def get_jade_context(self):
-        with open('./jade-dev.context') as f:
+        with open('./jade-'+PLATFORM+'.context') as f:
             return json.load(f)
 
     def render_jade(self, orig_path):
+        print orig_path, os.path.isfile(orig_path)
+        if os.path.isfile(orig_path) and 'views' not in orig_path:
+            return orig_path
         jade_template_path = "%s.jade" % os.path.splitext(orig_path)[0]
         with open(jade_template_path) as f:
             src = f.read()
@@ -27,7 +30,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                 f.write(html)
         except:
             os.system('jade ' + jade_template_path + ' --out ' +
-                      os.path.dirname(orig_path) + ' --obj ./jade-dev.context')
+                      os.path.dirname(orig_path) + ' --obj ./jade-'+PLATFORM+'.context')
         return orig_path
 
 
@@ -46,7 +49,9 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         return SimpleHTTPServer.SimpleHTTPRequestHandler.translate_path(self, path)
 
-
+# NODE_ENV - переменная которая используется в loopback.js для определения
+# где запущено приложение
+PLATFORM = os.environ.get('NODE_ENV', 'dev')
 port = os.environ.get('PORT', 8000)
 server_address = ("", int(port))
 httpd = BaseHTTPServer.HTTPServer(server_address, RequestHandler)

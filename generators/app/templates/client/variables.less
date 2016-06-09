@@ -1,2 +1,130 @@
-@import "../bower_components/bootstrap/less/bootstrap.less";
+//  бутстрап хорош всем. кроме того, что по умолчанию импортируется все,
+//  что замедляет процесс сборки цсс. а поскольку весь бутстрап врядли
+//  может понадобиться в каждом проекте, то почему бы не регулировать
+//  импортирование переменными?
+
+// ПРИМ: less воспринимает как True только true. 1 != true
+
+@importNavs: true;
+@importLabels: false;
+@importBadges: false;
+@importJumbotron: false;
+@importThumbnails: false;
+@importAlerts: false;
+@importProgressBars: false;
+@importMedia: true;
+@importListGroup: false;
+@importPanels: false;
+@importResponsiveEmbed: false;
+@importWells: false;
+//
+@importModals: false;
+@importTooltip: false;
+@importPopovers: false;
+@importCarousel: false;
+//
+//
+
+
+// Core variables and mixins
+@import "../bower_components/bootstrap/less/variables.less";
+@import "../bower_components/bootstrap/less/mixins.less";
+
+// Reset and dependencies
+@import "../bower_components/bootstrap/less/normalize.less";
+@import "../bower_components/bootstrap/less/print.less";
+@import "../bower_components/bootstrap/less/glyphicons.less";
+
+// Core CSS
+@import "../bower_components/bootstrap/less/scaffolding.less";
+@import "../bower_components/bootstrap/less/type.less";
+@import "../bower_components/bootstrap/less/code.less";
+@import "../bower_components/bootstrap/less/grid.less";
+@import "../bower_components/bootstrap/less/tables.less";
+@import "../bower_components/bootstrap/less/forms.less";
+@import "../bower_components/bootstrap/less/buttons.less";
+
+
+// Utility classes
+@import "../bower_components/bootstrap/less/utilities.less";
+@import "../bower_components/bootstrap/less/responsive-utilities.less";
+
+
+// Components
+@import "../bower_components/bootstrap/less/component-animations.less";
+@import "../bower_components/bootstrap/less/dropdowns.less";
+@import "../bower_components/bootstrap/less/button-groups.less";
+@import "../bower_components/bootstrap/less/input-groups.less";
+@import "../bower_components/bootstrap/less/close.less";
+
+& when(@importNavs){
+    @import "../bower_components/bootstrap/less/navs.less";
+    @import "../bower_components/bootstrap/less/navbar.less";
+    @import "../bower_components/bootstrap/less/breadcrumbs.less";
+    @import "../bower_components/bootstrap/less/pagination.less";
+    @import "../bower_components/bootstrap/less/pager.less";
+}
+& when(@importLabels){
+    @import "../bower_components/bootstrap/less/labels.less";
+}
+& when(@importBadges){
+    @import "../bower_components/bootstrap/less/badges.less";
+}
+& when(@importJumbotron){
+    @import "../bower_components/bootstrap/less/jumbotron.less";
+}
+& when(@importThumbnails){
+    @import "../bower_components/bootstrap/less/thumbnails.less";
+}
+& when(@importAlerts){
+    @import "../bower_components/bootstrap/less/alerts.less";
+}
+& when(@importProgressBars){
+    @import "../bower_components/bootstrap/less/progress-bars.less";
+}
+& when(@importMedia){
+    @import "../bower_components/bootstrap/less/media.less";
+}
+& when(@importListGroup){
+    @import "../bower_components/bootstrap/less/list-group.less";
+}
+& when(@importPanels){
+    @import "../bower_components/bootstrap/less/panels.less";
+}
+& when(@importResponsiveEmbed){
+    @import "../bower_components/bootstrap/less/responsive-embed.less";
+}
+& when(@importWells){
+    @import "../bower_components/bootstrap/less/wells.less";
+}
+
+// Components w/ JavaScript
+& when(@importModals){
+    @import "../bower_components/bootstrap/less/modals.less";
+}
+& when(@importTooltip){
+    @import "../bower_components/bootstrap/less/tooltip.less";
+}
+& when(@importPopovers){
+    @import "../bower_components/bootstrap/less/popovers.less";
+}
+& when(@importCarousel){
+    @import "../bower_components/bootstrap/less/carousel.less";
+}
+
+
+
+
+
+//
+//
+//
+
+
+
 @icon-font-path: "/bower_components/bootstrap/fonts/";
+@grid-columns: 100;
+
+//
+//
+//

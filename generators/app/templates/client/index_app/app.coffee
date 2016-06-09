@@ -8,7 +8,7 @@ angular.module 'IndexApp', ['gettext', 'ui.bootstrap','ui.gettext.langPicker', '
     $langPickerConf.setLanguageRemoteUrl("/client/languages/")
 
 
-.controller 'Ctrl',
+.controller 'BodyCtrl',
     ($scope, $langPickerConf) ->
          $scope.count = 1
          $scope.$langPickerConf = $langPickerConf

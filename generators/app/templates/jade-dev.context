@@ -1,8 +1,9 @@
 {
-    <% if (useCms){ %>
-    "$cmsDbBucket": "db",
-    <% } %>
     "$isDevPlatform": true,
     "$PLATFORM":"dev",
-    "$LOCALE":"en"
+    "$LOCALE":"en",
+    "CMS_BASE_URL": "http://localhost:3000",
+    "CMS_STORAGE":{
+        "type": "local"
+    }
 }

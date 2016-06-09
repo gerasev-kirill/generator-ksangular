@@ -1,0 +1,31 @@
+html
+	head
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		base(href="/")
+		title(ng-bind="$title")
+		block css_links
+			// bower:css
+			// endbower
+		block ng_app_css_links
+			if $isDevPlatform
+				link(rel="stylesheet", type="text/css", href="/client/site.css")
+			else
+				link(rel="stylesheet", type="text/css", href="/client/site.min.css")
+
+
+
+
+	body
+		block body
+		
+		
+		block js_scripts
+			if $isDevPlatform
+				// bower:js
+				// endbower
+			else
+				script(src='/client/bower_libs.min.js')
+
+
+		block ng_app

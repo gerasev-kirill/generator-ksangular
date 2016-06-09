@@ -19,37 +19,11 @@ module.exports = yeoman.Base.extend({
         name: 'projectName',
         message: 'Type project name'
     },
-    {
-        type: 'confirm',
-        name: 'useCms',
-        message: 'Use cms module?',
-        default: true
-    },
-    {
-        type: 'confirm',
-        name: 'useL18n',
-        message: 'Use multilanguage support?',
-        default: true
-    },
-    {
-        type: 'confirm',
-        name: 'overrideBootstrapVars',
-        message: 'Override bootstrap variables?',
-        default: true
-    },
-    {
-        type: 'confirm',
-        name: 'installPythonPkgs',
-        message: 'Install packages for python scripts?',
-        default: false
-    }
-];
+    ];
 
     this.prompt(prompts, function (props) {
-      this.props = props;
-      // To access props later use this.props.someAnswer;
-
-      done();
+        this.props = props;
+        done();
     }.bind(this));
   },
 
@@ -61,92 +35,77 @@ module.exports = yeoman.Base.extend({
       this.directory('bin', 'bin');
       this.directory('client', 'client');
       this.directory('views', 'views');
+      console.log('1');
 
-      if (this.props.useL18n){
-          this.directory('client_l18n', 'client');
-          this.directory('views_l18n', 'views');
-      }
-      if (this.props.useCms){
-          this.directory('client_cms', 'client');
-      }
 
-      this.fs.copyTpl(
-          this.templatePath('variables.less'),
-          this.destinationPath('client/variables.less'),
-          this.props
-      );
-
-      this.fs.copyTpl(
-          this.templatePath('base.jade'),
-          this.destinationPath('views/base.jade'),
-          this.props
-      );
       this.fs.copy(
           this.templatePath('gitignore'),
           this.destinationPath('.gitignore')
       );
 
 
-      var files = ['jade-dev.context', 'Makefile', 'requirements.python.txt', 'server.py',
-                    'package.json', 'bower.json', 'Gruntfile.coffee'];
+      console.log('1');
+      var files = ['jade-dev.context', 'jade-mixed.context', 'jade-prod.context',
+                   'Makefile', 'requirements.python.txt', 'server.py',
+                   'package.json', 'bower.json', 'Gruntfile.coffee'];
 
       for(var i=0; i<files.length; i++){
+          console.log(files[i]);
           this.fs.copyTpl(
               this.templatePath(files[i]),
               this.destinationPath(files[i]),
               this.props
           );
+          console.log('done '+files[i]);
       }
   },
 
 
   install: function () {
-      this.npmInstall([ 'grunt-contrib-concat', 'grunt-wiredep',
-                        'grunt-contrib-less', 'grunt-less-imports',
-                        'grunt-contrib-pug', 'grunt-contrib-connect',
-                        'grunt-replace', 'grunt-simple-watch',
-                        'github:jekkos/grunt-script-link-tags'],
-                         {'saveDev': true});
+    this.npmInstall([
+                    'angular-template-inline-js',
+                    'grunt-angular-template-inline-js',
+                    'grunt-contrib-compress',
+                    'grunt-contrib-cssmin', 'grunt-contrib-uglify',
+                    'grunt-ng-annotate', 'grunt',
+                    'grunt-contrib-concat', 'grunt-wiredep',
+                    'grunt-contrib-less', 'grunt-less-imports',
+                    'grunt-contrib-pug', 'grunt-contrib-connect',
+                    'grunt-replace', 'grunt-simple-watch',
+                    'grunt-angular-gettext',
+                    'github:jekkos/grunt-script-link-tags'],
+                {'save': true}
+    );
 
 
-      this.bowerInstall(['angular-bootstrap', 'bootstrap',
-                         'angular-ui-router', 'angular-animate'],
-                         {'save':true});
+    this.bowerInstall([
+                        'angular-bootstrap', 'bootstrap',
+                        'angular-ui-router', 'angular-animate',
+                        'angular-gettext', 'components-font-awesome',
+                        'angular-scroll', 'world-flags-sprite',
+                        ],
+                {'save':true}
+    );
 
-      //this.bowerInstall(['less.js'], {'saveDev':true});
+    //this.bowerInstall(['less.js'], {'saveDev':true});
 
-      if (this.props.useL18n){
-          this.npmInstall(['grunt-angular-gettext'],
-                         {'saveDev': true});
-          this.bowerInstall(['angular-gettext',
-                            'https://github.com/gerasev-kirill/ui-flags.git#~0.0.4',
-                            'https://github.com/gerasev-kirill/angular-gettext-lang-picker.git'],
-                            {'save':true});
-      }
+    this.spawnCommand('make', ['install_virtualenv2']);
 
-      if (this.props.installPythonPkgs){
-          this.spawnCommand('make', ['install_virtualenv2']);
-      }
   },
 
   end: function(){
 
-      this.spawnCommand('grunt', ['wiredep']);
-      this.spawnCommand('grunt', ['less:prod']);
-      if (this.props.useL18n){
-          this.spawnCommand('grunt', ['po']);
-      }
+    this.spawnCommand('grunt', ['wiredep']);
+    this.spawnCommand('grunt', ['tags']);
+    this.spawnCommand('grunt', ['pug:client']);
+    this.spawnCommand('grunt', ['pug:views']);
+    this.spawnCommand('grunt', ['po']);
+    this.spawnCommand('grunt', ['index_app']);
 
-      if (this.props.installPythonPkgs){
-          this.log(yosay(
+    this.log(yosay(
               "Now you can run server with command " + chalk.blue('make run') + " or with "+
               chalk.yellow("grunt connect")
-          ));
-      }
-      else{
-          this.log(yosay(
-              "Now you can run server with command " + chalk.yellow("grunt connect")
-          ));
-      }
+     ));
+
   }
 });
