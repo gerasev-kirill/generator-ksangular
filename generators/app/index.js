@@ -80,6 +80,7 @@ module.exports = yeoman.Base.extend({
                         'angular-ui-router', 'angular-animate',
                         'angular-gettext', 'components-font-awesome',
                         'angular-scroll', 'world-flags-sprite',
+                        'angular-ui-router-title', 'angular-loading-bar'
                         ],
                 {'save':true}
     );
