@@ -35,7 +35,6 @@ module.exports = yeoman.Base.extend({
       this.directory('bin', 'bin');
       this.directory('client', 'client');
       this.directory('views', 'views');
-      console.log('1');
 
 
       this.fs.copy(
@@ -44,19 +43,17 @@ module.exports = yeoman.Base.extend({
       );
 
 
-      console.log('1');
+
       var files = ['jade-dev.context', 'jade-mixed.context', 'jade-prod.context',
                    'Makefile', 'requirements.python.txt', 'server.py',
                    'package.json', 'bower.json', 'Gruntfile.coffee'];
 
       for(var i=0; i<files.length; i++){
-          console.log(files[i]);
           this.fs.copyTpl(
               this.templatePath(files[i]),
               this.destinationPath(files[i]),
               this.props
           );
-          console.log('done '+files[i]);
       }
   },
 
