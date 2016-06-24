@@ -16,16 +16,21 @@
     "overrides": {
         "bootstrap": {
             "main": [
-                "less/bootstrap.less"
+                <%  if (useAngular) { %>"less/bootstrap.less"<% } %>
+                <%  if (!useAngular) { %>"dist/js/bootstrap.min.js"<% } %>
             ]
-        },
+        },<%  if (useAngular) { %>
         "jquery": {
             "main": []
-        },
+        },<% } %>
         "world-flags-sprite": {
             "main": [
-                "stylesheets/flags32.css",
                 "stylesheets/flags16.css"
+            ]
+        },
+        "components-font-awesome":{
+            "main":[
+              "css/font-awesome.min.css"
             ]
         },
         "less.js":{

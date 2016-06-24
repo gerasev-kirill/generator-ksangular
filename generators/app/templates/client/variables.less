@@ -1,7 +1,5 @@
 //  бутстрап хорош всем. кроме того, что по умолчанию импортируется все,
-//  что замедляет процесс сборки цсс. а поскольку весь бутстрап врядли
-//  может понадобиться в каждом проекте, то почему бы не регулировать
-//  импортирование переменными?
+//  но не от всех классов потом можно избавиться с помощью purifycss.
 
 // ПРИМ: less воспринимает как True только true. 1 != true
 
@@ -17,6 +15,7 @@
 @importPanels: false;
 @importResponsiveEmbed: false;
 @importWells: false;
+@importGlyph: false;
 //
 @importModals: false;
 @importTooltip: false;
@@ -33,7 +32,9 @@
 // Reset and dependencies
 @import "../bower_components/bootstrap/less/normalize.less";
 @import "../bower_components/bootstrap/less/print.less";
-@import "../bower_components/bootstrap/less/glyphicons.less";
+& when(@importGlyph){
+    @import "../bower_components/bootstrap/less/glyphicons.less";
+}
 
 // Core CSS
 @import "../bower_components/bootstrap/less/scaffolding.less";

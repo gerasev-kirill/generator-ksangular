@@ -2,22 +2,22 @@ html
 	head
 		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
+		link(rel="icon", href="data:;base64,iVBORw0KGgo=")
 		base(href="/")
-		title(ng-bind="$title")
-		block css_links
-			// bower:css
-			// endbower
-		block ng_app_css_links
+		title<%  if (useAngular) { %>(ng-bind="$title")<% } %><%  if (siteTitle) { %> <%= siteTitle %> <% } %>
+
+		block ng_app_css
 			if $isDevPlatform
 				link(rel="stylesheet", type="text/css", href="/client/site.css")
 			else
-				link(rel="stylesheet", type="text/css", href="/client/site.min.css")
-
+				<%  if (!inlineCssStyle) { %>//-<% } %>style
+					include ../client/site.min.css
+				<%  if (inlineCssStyle) { %>//-<% } %>link(rel="stylesheet", type="text/css", href="/client/site.min.css")
 
 
 
 	body
-		block body
+		block body_content
 		
 		
 		block js_scripts
@@ -25,7 +25,35 @@ html
 				// bower:js
 				// endbower
 			else
-				script(src='/client/bower_libs.min.js')
-
+				script(src='/client/bower_libs.min.js')<%  if (useUiCms) { %>
+			script.
+				//- даем возможность также загружать приложение через django
+				var CMS_BASE_URL = '{{CMS_BASE_URL}}';
+				var CMS_DB_BUCKET = '{{CMS_DB_BUCKET}}';
+				var CMS_DEFAULT_LANG = 'en';
+				var CMS_STORAGE = {
+					"type": "{{CMS_STORAGE.type}}",
+					"server": "{{CMS_STORAGE.server}}"
+				};
+				
+				//- если django нет, то пытаемся подхватить переменные от jade
+				if ( CMS_BASE_URL.indexOf('CMS_BASE_URL') > -1 || CMS_BASE_URL.length == 0 ){
+					CMS_BASE_URL = '#{CMS_BASE_URL}';
+				}
+				if (CMS_DB_BUCKET.indexOf('CMS_DB_BUCKET') > -1 || CMS_DB_BUCKET.length == 0){
+					CMS_DB_BUCKET = "#{CMS_DB_BUCKET}";
+				}
+				if (CMS_STORAGE.type.indexOf('CMS_STORAGE') > -1 || CMS_STORAGE.type.length == 0){
+					CMS_STORAGE.type = "#{CMS_STORAGE.type}";
+					CMS_STORAGE.server = "#{CMS_STORAGE.server}";
+				}
+			<% } %>
 
 		block ng_app
+
+
+		block css_links
+			link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Lobster',
+				media="none", onload="if(media!='all')media='all'")
+			// bower:css
+			// endbower

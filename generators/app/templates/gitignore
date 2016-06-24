@@ -5,3 +5,6 @@ bower_components
 *.css
 ap2
 *.mo
+*.js
+!.gitignore
+auto_*

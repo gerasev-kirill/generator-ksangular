@@ -2,37 +2,15 @@ extends ./base.jade
 
 
 block ng_app
-    script.
-        // даем возможность также загружать приложение через django
-        var CMS_BASE_URL = '{{CMS_BASE_URL}}';
-        var CMS_DB_BUCKET = '{{CMS_DB_BUCKET}}';
-        var CMS_DEFAULT_LANG = 'en';
-        var CMS_STORAGE = {
-            "type": "{{CMS_STORAGE.type}}",
-            "server": "{{CMS_STORAGE.server}}"
-        };
-        
-        // если django нет, то пытаемся подхватить переменные от jade
-        if ( CMS_BASE_URL.indexOf('CMS_BASE_URL') > -1 || CMS_BASE_URL.length == 0 ){
-            CMS_BASE_URL = '#{CMS_BASE_URL}';
-        }
-        if (CMS_DB_BUCKET.indexOf('CMS_DB_BUCKET') > -1){
-            CMS_DB_BUCKET = "#{CMS_DB_BUCKET}";
-        }
-        if (CMS_STORAGE.type.indexOf('CMS_STORAGE')>-1){
-            CMS_STORAGE.type = "#{CMS_STORAGE.type}";
-            CMS_STORAGE.server = "#{CMS_STORAGE.server}";
-        }
-        
-    // подключаем файл с ngResource-моделями от cms и другие библиотеки, css
-    // TODO: сгребти js и css файлы от cms в 1 большой js-блоб 
+    <%  if (useUiCms) { %>//- подключаем файл с ngResource-моделями от cms и другие библиотеки, css
+    //- TODO: сгребти js и css файлы от cms в 1 большой js-блоб 
     if $isDevPlatform
         script(src="http://localhost:3000/client/cms_app.js")
         link(type="text/css", href="http://localhost:3000/client/cms_app.css", rel="stylesheet")
     else
         script(src="#{CMS_BASE_URL}/client/cms_app.min.js")
         link(type="text/css", href="#{CMS_BASE_URL}/client/cms_app.css", rel="stylesheet")
-    //
+    <% } %>//-
     if $isDevPlatform
         <!-- start auto template tags -->
         <!-- end auto template tags -->
@@ -41,7 +19,7 @@ block ng_app
 
 
 
-block body
+block body_content
     br
     div.text-center(ng-controller="BodyCtrl")
         lang-picker

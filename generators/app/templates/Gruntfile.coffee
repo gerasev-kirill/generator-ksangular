@@ -14,11 +14,14 @@ module.exports = (grunt)->
 			list.push('client/'+d+"/**/!(module*)*.js")
 		list
 
+
 	generateBowerLibsList = ()->
 		wiredep = require('wiredep')({
 			src: 'views/base.jade',
 			ignorePath: '..'
 		})
+		if not wiredep.js
+			return []
 		path = require('path')
 
 		bower_libs = []
@@ -26,7 +29,7 @@ module.exports = (grunt)->
 			j = j.replace(__dirname, '')
 			j = j[1...]
 			f = path.parse(j)
-			if f.ext == '.min.js'
+			if f.ext == '.min.js'  or  f.base.indexOf('.min.js') > -1
 				bower_libs.push(j)
 				continue
 			bower_libs.push(
@@ -34,18 +37,21 @@ module.exports = (grunt)->
 			)
 		bower_libs
 
+
 	generateBowerCssList = ()->
 		wiredep = require('wiredep')({
 			src: 'views/base.jade',
 			ignorePath: '..'
 		})
+		if not wiredep.css
+			return []
 		path = require('path')
 		bower_css = []
 		for j in wiredep.css
 			j = j.replace(__dirname, '')
 			j = j[1...]
 			f = path.parse(j)
-			if f.ext == '.css.min'
+			if f.ext == '.min.css'  or  f.base.indexOf('.min.css') > -1
 				bower_libs.push(j)
 				continue
 			bower_css.push(
@@ -161,8 +167,8 @@ module.exports = (grunt)->
 				},
 				files:{
 					'client/site.css':'client/site.less',
-					#'client/css/style-admin.css':'client/style-admin.less',
-					#'client/css/style-moderator.css':'client/style-moderator.less'
+					#'client/css/site-admin.css':'client/site-admin.less',
+					#'client/css/site-moderator.css':'client/site-moderator.less'
 				}
 			}
 		}
@@ -180,17 +186,6 @@ module.exports = (grunt)->
 					}
 			}
 		},
-		connect:{
-			server:{
-				options:{
-					port:8000,
-					hostname: 'localhost',
-					base: ['views', './'],
-					keepalive: true
-				}
-			}
-		},
-
 		nggettext_extract: {
 			pot: {
 				files: {
@@ -241,13 +236,23 @@ module.exports = (grunt)->
 				}
 			}
 		},
-		cssmin:{
-			all:{
-				files:{
-					'client/style.min.css': [
-						'client/site.css'
-					]
-				}
+		purifycss:{
+			options:{
+				minify: true
+				whitelist: ['modal-backdrop', 'caret']
+			},
+			build:{
+				src: [
+					'views/**/*.html', 'client/**/*.html',
+					'bower_components/angular-bootstrap/*.js'
+				],
+				css: ['client/site.css'],
+				dest: 'client/site.min.css'
+			}
+			fontawesome:{
+				src: ['views/**/*.html', 'client/**/*.html'],
+				css: ['__build__/bower_components/components-font-awesome/css/font-awesome.css'],
+				dest: '__build__/bower_components/components-font-awesome/css/font-awesome.min.css'
 			}
 		},
 		compress:{
@@ -282,8 +287,21 @@ module.exports = (grunt)->
 				ext: '.html.gz'
 			},
 		}
+		imagemin:{
+			build:{
+				options:{
+					optimizationLevel: 5
+				}
+				files:[{
+					expand: true,
+					cwd: '__build__/',
+					src: ['**/*.{png,jpg,gif}'],
+					dest: '__build__/'
+				}]
+			}
+		}
 	}
-	grunt.loadNpmTasks 'grunt-contrib-connect'
+
 	grunt.loadNpmTasks 'grunt-script-link-tags'
 	grunt.loadNpmTasks 'grunt-replace'
 	grunt.loadNpmTasks 'grunt-wiredep'
@@ -295,8 +313,10 @@ module.exports = (grunt)->
 	grunt.loadNpmTasks 'grunt-angular-template-inline-js'
 	grunt.loadNpmTasks 'grunt-contrib-uglify'
 	grunt.loadNpmTasks 'grunt-ng-annotate'
-	grunt.loadNpmTasks 'grunt-contrib-cssmin'
 	grunt.loadNpmTasks 'grunt-contrib-compress'
+	grunt.loadNpmTasks 'grunt-purifycss'
+	grunt.loadNpmTasks 'grunt-contrib-imagemin'
+
 
 	grunt.loadNpmTasks 'grunt-angular-gettext'
 	grunt.registerTask 'po', ['pug:views', 'pug:client', 'nggettext_extract']
@@ -306,12 +326,17 @@ module.exports = (grunt)->
 	grunt.registerTask 'default', 'simple-watch'
 	grunt.registerTask 'index_app', [
 				'less_imports', 'less:prod',
-				'replace', 'concat:index_app', 'ngAnnotate',
-				'angular_template_inline_js', 'uglify:all',
-				'concat:bower_js_libs',
-				'cssmin'
+				'replace', 'concat:index_app',
+				'ngAnnotate', 'angular_template_inline_js',
+				'uglify:all',
+				'concat:bower_js_libs'
 	]
 
 	grunt.registerTask 'build-deploy', [
-				'index_app', 'pug:views_prod'
+				'pug:client',
+				'index_app',
+				'pug:views',
+				'purifycss:build',
+				'pug:views_prod',
+				'imagemin'
 	]
