@@ -1,0 +1,13 @@
+<%  if (!fileType) { %>
+#<%= viewName %>View
+    
+<% } %><% if (fileType == 'l') { %>
+#<%= viewName %>ListView
+    
+<% } %><% if (fileType == 'd') { %>
+#<%= viewName %>DetailsView
+    
+<% } %><% if (fileType == 'e' || fileType == 'a' ) { %>
+#<%= viewName %>EditView
+    
+<% } %>

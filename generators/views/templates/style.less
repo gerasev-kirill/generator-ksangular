@@ -1,0 +1,22 @@
+
+<%  if (!viewsType) { %>
+#<%= viewName %>View{
+
+}
+
+
+<% } %><% if (viewsType.indexOf('l')>-1) { %>
+#<%= viewName %>ListView{
+
+}
+
+
+<% } %><% if (viewsType.indexOf('d')>-1) { %>
+#<%= viewName %>DetailsView{
+
+}
+<% } %><% if (viewsType.indexOf('e')>-1 || viewsType.indexOf('a')>-1 ) { %>
+#<%= viewName %>EditView{
+    
+}
+<% } %>
