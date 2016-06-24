@@ -64,8 +64,8 @@ module.exports = (grunt)->
 
 
 	grunt.initConfig {
-		pkg: grunt.file.readJSON('package.json'),
-		replace: {
+		pkg: grunt.file.readJSON('package.json')
+		replace:
 			options:{},
 			files:{
 					expand: true,
@@ -73,8 +73,7 @@ module.exports = (grunt)->
 					src: ['**/*.js', '**/*.html'],
 					dest: 'client',
 				}
-		},
-		tags: {
+		tags:
 			build: {
 				options: {
 					scriptTemplate: '<script src="/{{ path }}"></script>',
@@ -84,15 +83,13 @@ module.exports = (grunt)->
 				src: generateFilePattern(index_app),
 				dest: 'views/index.jade'
 			}
-		},
-		less_imports:{
+		less_imports:
 				options:{},
 				client:{
 					src: [ 'client/*_app/**/style.less'],
 					dest: 'client/auto_imports.less'
 				}
-		},
-		watch:{
+		watch:
 			js_html:{
 					files: ['client/*_app/**/*.js', 'client/*_app/**/*.html' ],
 					tasks: ['replace', 'tags']
@@ -101,8 +98,7 @@ module.exports = (grunt)->
 					files: ['client/*_app/**/*.less', 'client/*.less' ],
 					tasks: ['less_imports', 'less:prod']
 			}
-		},
-		coffee:{
+		coffee:
 			glob_to_multiple: {
 				expand: true,
 				cwd: 'client',
@@ -110,9 +106,8 @@ module.exports = (grunt)->
 				dest: 'client',
 				ext: '.js'
 			}
-		},
 		# pug == jade templates
-		pug:{
+		pug:
 			views:{
 				options:{
 					data: grunt.file.readJSON('./jade-dev.context')
@@ -146,8 +141,7 @@ module.exports = (grunt)->
 					ext: '.html'
 				}]
 			},
-		},
-		concat:{
+		concat:
 			options:{
 				separator:';\n'
 			},
@@ -159,24 +153,16 @@ module.exports = (grunt)->
 				src: generateBowerLibsList(),
 				dest: 'client/bower_libs.min.js'
 			}
-		}
-		less:{
+		less:
 			prod:{
-				options:{
-					#compress:true
-				},
+				options:{},
 				files:{
 					'client/site.css':'client/site.less',
-					#'client/css/site-admin.css':'client/site-admin.less',
-					#'client/css/site-moderator.css':'client/site-moderator.less'
 				}
 			}
-		}
-		wiredep: {
+		wiredep:
 			task: {
-				src: [
-					'views/**/*.jade'
-				],
+				src: [ 'views/**/*.jade' ],
 				options: {
 						cwd: './',
 						ignorePath: '..',
@@ -185,32 +171,27 @@ module.exports = (grunt)->
 						devDependencies: false,
 					}
 			}
-		},
-		nggettext_extract: {
+		nggettext_extract:
 			pot: {
 				files: {
 					'po/template.pot': ['views/**/*.html', 'client/**/*.html']
 				}
-			},
-		},
-		nggettext_compile: {
+			}
+		nggettext_compile:
 			lazy: {
 				options: {
 					format: "json"
 				},
-				files: [
-					{
+				files: [{
 						expand: true,
 						dot: true,
 						cwd: "po",
 						dest: "client/languages",
 						src: ['*.po'],
 						ext: ".json"
-					}
-				]
+				}]
 			}
-		},
-		angular_template_inline_js: {
+		angular_template_inline_js:
 			options:{
 				basePath: __dirname
 			},
@@ -220,23 +201,20 @@ module.exports = (grunt)->
 				src: ['index_app.js'],
 				dest: 'client'
 			}
-		},
-		ngAnnotate: {
+		ngAnnotate:
 			files:{
 				cwd: 'client',
 				expand: true,
 				src: ['*.js'],
 				dest: 'client'
 			}
-		},
-		uglify:{
+		uglify:
 			all:{
 				files:{
 					'client/index_app.min.js':['client/index_app.js']
 				}
 			}
-		},
-		purifycss:{
+		purifycss:
 			options:{
 				minify: true
 				whitelist: ['modal-backdrop', 'caret']
@@ -254,8 +232,7 @@ module.exports = (grunt)->
 				css: ['__build__/bower_components/components-font-awesome/css/font-awesome.css'],
 				dest: '__build__/bower_components/components-font-awesome/css/font-awesome.min.css'
 			}
-		},
-		compress:{
+		compress:
 			css:{
 				options:{
 					mode:'gzip'
@@ -286,8 +263,7 @@ module.exports = (grunt)->
 				dest: '__build__/',
 				ext: '.html.gz'
 			},
-		}
-		imagemin:{
+		imagemin:
 			build:{
 				options:{
 					optimizationLevel: 5
@@ -299,8 +275,8 @@ module.exports = (grunt)->
 					dest: '__build__/'
 				}]
 			}
-		}
 	}
+
 
 	grunt.loadNpmTasks 'grunt-script-link-tags'
 	grunt.loadNpmTasks 'grunt-replace'
@@ -319,8 +295,13 @@ module.exports = (grunt)->
 
 
 	grunt.loadNpmTasks 'grunt-angular-gettext'
-	grunt.registerTask 'po', ['pug:views', 'pug:client', 'nggettext_extract']
-	grunt.registerTask 'po-compile', 'nggettext_compile:lazy'
+	grunt.registerTask 'po', [
+				'pug:views', 'pug:client',
+				'nggettext_extract'
+	]
+	grunt.registerTask 'po-compile', [
+				'nggettext_compile:lazy'
+	]
 
 
 	grunt.registerTask 'default', 'simple-watch'
