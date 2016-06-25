@@ -1,0 +1,15 @@
+#SecondPageView
+    h1 SecondPage View
+    small (see /@@__SOURCE_PATH__/*)
+    
+    .row.content
+        .col-xs-20.col-xs-offset-40
+            .form-group
+                label Test numerals with gettext
+                input.form-control(type="number", ng-model="boats", required)
+
+            div(style="margin-bottom:1em;")
+                lang-picker
+
+            label Rendered Value:
+            p(translate, translate-n="boats", translate-plural="{{boats}} boats") One boat

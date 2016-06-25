@@ -45,6 +45,7 @@ module.exports = yeoman.Base.extend({
 
         this.prompt(prompts, function(props) {
             this.props = props;
+            this.props.projectName = props.projectName.replace(/ /g, '_');
             if (props.useAngular) {
                 this.prompt(prompts_angular, function(props) {
                     this.props = extend(this.props, props);
@@ -72,6 +73,14 @@ module.exports = yeoman.Base.extend({
         this.directory('client', 'client');
         if (this.props.useAngular) {
             this.directory('client_angular', 'client');
+        }
+        else{
+            this.fs.delete('client/*_app');
+            this.fs.copy(
+                this.templatePath('empty.txt'),
+                this.destinationPath('client/site.min.css')
+            );
+            this.directory('client_jquery', 'client');
         }
 
         var files = ['base.jade', 'index.jade', 'sitemap.xml'];
@@ -110,6 +119,9 @@ module.exports = yeoman.Base.extend({
         var self = this,
             bower_libs = [];
 
+        self.spawnCommand('git', ['init']);
+
+
         function bowerInstall() {
             if (self.props.useAngular) {
                 bower_libs = [
@@ -134,12 +146,14 @@ module.exports = yeoman.Base.extend({
                     'save': true
                 },
                 function() {
+                    self.spawnCommand('git', ['add',
+                            'bin/', 'client/', 'views/', 'Gruntfile.coffee',
+                            'jade-*', 'package.json', 'requirements*', 'server.py',
+                            '.gitignore', 'bower.json', 'Makefile'
+                    ]);
                     self.spawnCommand('grunt', ['wiredep']);
-                    self.spawnCommand('grunt', ['tags']);
-                    self.spawnCommand('grunt', ['pug:client']);
-                    self.spawnCommand('grunt', ['pug:views']);
                     self.spawnCommand('grunt', ['po']);
-                    self.spawnCommand('grunt', ['index_app']);
+                    self.spawnCommand('grunt', ['build']);
                 }
             );
         }
@@ -147,6 +161,7 @@ module.exports = yeoman.Base.extend({
 
         this.npmInstall([
                 'grunt@0.4.5',
+                'grunt-contrib-coffee',
                 'angular-template-inline-js',
                 'grunt-angular-template-inline-js',
                 'grunt-contrib-compress',

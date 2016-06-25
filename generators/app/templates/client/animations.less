@@ -48,3 +48,47 @@
         opacity: 0;
     }
 }
+
+@keyframes bounceTopBottom {
+    0%{
+        transform: translateY(0%);
+        opacity: 0.2;
+    }
+    50% {
+        transform: translateY(-10%);
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+
+.ui-view-container {
+    display: block;
+    transition: all 0.5s ease-in-out;
+    animation: 0.3s bounceTopBottom linear;
+    .ui-view-animation {
+        display: block;
+        transition: all 0.5s ease-in-out;
+        &.ng-enter, &.ng-leave {
+            overflow: hidden;
+            opacity: 0.8;
+            transform: scale(0.8) translateY(-10%);
+        }
+        &.ng-hide-add, &.ng-enter-active  {
+            overflow: hidden;
+            opacity: 0.4;
+            transform: scale(0.8) translateY(-30%);
+        }
+        &.ng-hide-remove, &.ng-leave-active {
+            overflow: hidden;
+            opacity: 0.2;
+            transform: scale(0.5) translateY(-50%);
+        }
+        &.ng-hide, &.ng-leave {
+            overflow: hidden;
+            display: none;
+        }
+    }
+}

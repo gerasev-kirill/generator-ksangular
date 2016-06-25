@@ -20,25 +20,14 @@ block ng_app
 
 
 block body_content
-    br
-    div.text-center(ng-controller="BodyCtrl")
-        lang-picker
-        br
-        input(type="number", ng-model="count")
-        
-        div(style="background: #95AEFF; border-radius:0.5em; padding:10px; margin-top:1em;")
-            button.btn.btn-default(type="button", 
-                ng-click="isCollapsed = !isCollapsed", translate) hello!
-            div(uib-collapse="isCollapsed", style="margin:3px;")
-                .well.well-lg(translate, translate-n="count", translate-plural="{{$count}} boats") One boat
-            .btn-group
-                a.btn.btn-danger(href, ui-sref="app.home({lang:LANG})",
-                    ui-sref-active="active", translate) First tab
-                a.btn.btn-danger(href, ui-sref="app.home2({lang:LANG})",
-                    ui-sref-active="active", translate) Second tab
-            div(style="background: white; border-radius:0.5em; padding:10px;", ui-view='')
-
-        if $isDevPlatform
-            h4.text-primary [debug]: dev 
-        else
-            h4.text-primary [debug]: prod 
+    <%  if (useAngular) { %>
+    .text-center(style="margin-top:1em;")
+        .btn-group
+            a.btn.btn-primary(ui-sref="app.index", ui-sref-active='active') Index
+            a.btn.btn-success(ui-sref="app.secondPage", ui-sref-active='active') SecondPage
+    .ui-view-container.text-center(ui-view='')
+    <% } else { %>
+    .container.text-center(style="margin-top:3em;")
+        h1 Hello!
+        p Simple app with jQuery and Bootstrap (no angular, gettext)
+    <% } %>

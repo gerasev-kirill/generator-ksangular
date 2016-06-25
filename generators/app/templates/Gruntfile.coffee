@@ -234,9 +234,7 @@ module.exports = (grunt)->
 			}
 		compress:
 			css:{
-				options:{
-					mode:'gzip'
-				}
+				options:{ mode:'gzip' },
 				expand: true,
 				cwd: '__build__/',
 				src: ['**/*.min.css'],
@@ -244,9 +242,7 @@ module.exports = (grunt)->
 				ext: '.min.css.gz'
 			},
 			js:{
-				options:{
-					mode:'gzip'
-				}
+				options:{ mode:'gzip' },
 				expand: true,
 				cwd: '__build__/',
 				src: ['**/*.min.js'],
@@ -254,9 +250,7 @@ module.exports = (grunt)->
 				ext: '.min.js.gz'
 			},
 			html:{
-				options:{
-					mode:'gzip'
-				}
+				options:{ mode:'gzip' },
 				expand: true,
 				cwd: '__build__/',
 				src: ['**/*.html'],
@@ -277,7 +271,7 @@ module.exports = (grunt)->
 			}
 	}
 
-
+	grunt.loadNpmTasks 'grunt-contrib-coffee'
 	grunt.loadNpmTasks 'grunt-script-link-tags'
 	grunt.loadNpmTasks 'grunt-replace'
 	grunt.loadNpmTasks 'grunt-wiredep'
@@ -313,7 +307,17 @@ module.exports = (grunt)->
 				'concat:bower_js_libs'
 	]
 
+	grunt.registerTask 'build', [
+				'coffee',
+				'tags',
+				'pug:client',
+				'index_app',
+				'pug:views'
+	]
+
 	grunt.registerTask 'build-deploy', [
+				'coffee',
+				'tags',
 				'pug:client',
 				'index_app',
 				'pug:views',
