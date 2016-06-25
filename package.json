@@ -1,5 +1,5 @@
 {
-  "name": "generator-ksangular",
+  "name": "generator-site",
   "version": "1.0.0",
   "description": "",
   "homepage": "",
@@ -33,7 +33,7 @@
     "gulp-plumber": "^1.0.0",
     "gulp-nsp": "^2.1.0"
   },
-  "repository": "gerasev-kirill/generator-ksangular",
+  "repository": "gerasev-kirill/generator-site",
   "eslintConfig": {
     "extends": "xo-space",
     "env": {

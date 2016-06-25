@@ -14,7 +14,7 @@ module.exports = yeoman.Base.extend({
 
         // Have Yeoman greet the user.
         this.log(yosay(
-            'Welcome to the neat ' + chalk.red('generator-ksangular') + ' generator!\n'+
+            'Welcome to the neat ' + chalk.red('generator-site') + ' generator!\n'+
             "Let's create some " + chalk.yellow('view ') + "for our app!"
         ));
 
