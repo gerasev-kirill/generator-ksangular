@@ -62,6 +62,42 @@ make run-mixed
 └──  server.py............реализация python-dev-сервера <br />
 
 
+## Дальнейшая сборка и поддержка приложения
+
+Чтоб заменить строки в js, html файлах, собрать less в css нужно запустить в папке с проектом
+
+```bash
+grunt
+```
+
+Эта задача НЕ ТРАНСЛИРУЕТ coffee => js и jade => html !! Для этого используйте возможности
+своей ide. Ide должна транслировать сама файлы, сохраняя вывод в том же месте где и исходник.
+
+Чтобы добавить новый angular-модуль, создайте в ./client новую папку *_app. Также добавьте ее в Gruntfile.coffee.
+
+* Пример дополнительного модуля от которого зависит index_app:
+
+```bash
+mkdir ./client/my_new_app
+echo "angular.module 'MyNewApp', []" > ./client/my_new_app/module.coffee
+```
+
+содержимое Gruntfile.coffee:
+
+```js
+index_app = [
+    "helpers_app",
+    "my_new_app",
+    "index_app"
+]
+```
+
+Также нужно подправить ./client/index_app/module.coffee. 
+Для обособленного от index_app приложения см. пример в ./client/index_app и задачи в Guntfile.coffee
+
+
+
+
 ## Cоздание новой view
 
 ```bash
