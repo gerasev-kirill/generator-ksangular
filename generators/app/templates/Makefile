@@ -18,6 +18,9 @@ run:
 run-prod:
 	env NODE_ENV=prod bash ./bin/run_server.sh
 
+run-mixed:
+	env NODE_ENV=mixed bash ./bin/run_server.sh
+
 
 build-dir:
 	grunt build-deploy
