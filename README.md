@@ -14,6 +14,11 @@ npm install -g gerasev-kirill/generator-site
 yo site
 ```
 
+Если был выбран angular, то приложение будет выглядеть так:
+[[https://github.com/gerasev-kirill/generator-site/blob/master/angular-app.png]]
+Если при генерировании отказались от angular, то приложение будет выглядеть так:
+[[https://github.com/gerasev-kirill/generator-site/blob/master/jquery-app.png]]
+
 ## Запуск приложения
 
 ```bash
