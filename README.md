@@ -8,16 +8,12 @@ npm install -g gerasev-kirill/generator-site
 ```
 
 ## Создание нового проекта
-* Генератор дает возможность выбора между angular-ом и только jQuery+Bootstrap *
+* Генератор дает возможность выбора между angular-ом и только jQuery+Bootstrap
 
 ```bash
 yo site
 ```
 
-Если был выбран angular, то приложение будет выглядеть так:
-![angular-app](https://github.com/gerasev-kirill/generator-site/blob/master/angular-app.png)
-Если при генерировании отказались от angular, то приложение будет выглядеть так:
-![angular-app](https://github.com/gerasev-kirill/generator-site/blob/master/jquery-app.png)
 
 ## Запуск приложения
 
@@ -47,6 +43,11 @@ make run-prod
 ```bash
 make run-mixed
 ```
+
+* Если был выбран angular, то приложение будет выглядеть так:
+![angular-app](https://github.com/gerasev-kirill/generator-site/blob/master/angular-app.png)
+* Если при генерировании отказались от angular, то приложение будет выглядеть так:
+![angular-app](https://github.com/gerasev-kirill/generator-site/blob/master/jquery-app.png)
 
 
 ## Иерархия сгенерированного приложения
