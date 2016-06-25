@@ -1,6 +1,6 @@
 
 ## Установка
-Для работы в ком. строке должны быть доступны git, python, npm, node.
+Для работы в ком. строке должны быть доступны git, make, python, npm, node.
 
 ```bash
 npm install -g yo
@@ -92,8 +92,8 @@ index_app = [
 ]
 ```
 
-Также нужно подправить ./client/index_app/module.coffee. 
-Для обособленного от index_app приложения см. пример в ./client/index_app и задачи в Guntfile.coffee
+Также нужно подправить ./client/index_app/module.coffee.
+Для обособленного от index_app приложения см. пример в ./client/index_app и задачи в Gruntfile.coffee
 
 
 
