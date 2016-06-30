@@ -6,11 +6,39 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var path = require('path');
 
+function getNgModuleName(dirpath){
+    var stat, content, line, moduleName=null;
+    while (true) {
+        stat = fs.existsSync(dirpath+'/module.coffee');
+        if (stat){
+            content = fs.readFileSync(dirpath+'/module.coffee', 'utf-8');
+            break;
+        }
+        dirpath = path.dirname(dirpath);
+        if (dirpath == '/') break;
+    }
+    if (dirpath == '/' || !content) return null;
+
+    content = content.split('\n')
+    for(var i in content){
+        line = content[i];
+        if (line.indexOf('angular.module')==0){
+            line = line.replace('angular.module','').split(',');
+            moduleName = line[0];
+            moduleName = moduleName.replace(/'/g,'').replace(/"/g,'').replace(/ /g,'');
+            break;
+        }
+    }
+    return moduleName;
+}
+
+
 module.exports = yeoman.Base.extend({
 
     prompting: function () {
         //
         var done = this.async();
+        var dirname, stat, listdir, ng_app_list=[], name, default_app='';
 
         // Have Yeoman greet the user.
         this.log(yosay(
@@ -18,17 +46,44 @@ module.exports = yeoman.Base.extend({
             "Let's create some " + chalk.yellow('view ') + "for our app!"
         ));
 
+        dirname = path.join(this.destinationRoot(), 'client');
+        listdir = fs.readdirSync(dirname);
+        for(var i=0; i<listdir.length; i++){
+            stat = fs.statSync(path.join(dirname, listdir[i]));
+            if (stat.isDirectory()){
+                name = getNgModuleName(path.join(dirname, listdir[i]));
+                if (name){
+                    ng_app_list.push(
+                        listdir[i]
+                    );
+                }
+            }
+        }
+
+        if(ng_app_list){
+            default_app = ng_app_list[0];
+        }
+        if (ng_app_list.indexOf('index_app')>-1){
+            default_app = 'index_app';
+        }
+
         var prompts = [
         {
             type: 'input',
             name: 'appName',
-            message: 'Type folder name of app inside ./client (ex.: my_fancy_app): ',
-            default: 'index_app'
+            message: 'Type folder name of app inside ./client ('+ng_app_list+'): ',
+            default: default_app,
+            validate: function(name){
+                return !!getNgModuleName(path.join(dirname, name));
+            }
         },
         {
             type: 'input',
             name: 'viewName',
-            message: 'Type view name (ex.: Articles): '
+            message: 'Type view name (ex.: Articles): ',
+            validate: function(name){
+                return !!name;
+            }
         },
         {
             type: 'input',
@@ -46,7 +101,10 @@ module.exports = yeoman.Base.extend({
             type: 'input',
             name: 'uiRouterPrefix',
             message: 'Ui router prefix (ex.: app ) : ',
-            default: 'app'
+            default: 'app',
+            validate: function(pref){
+                return !!pref;
+            }
         }
         ];
 
@@ -55,38 +113,13 @@ module.exports = yeoman.Base.extend({
             var line, moduleName;
             this.props = props;
             dirname = this.destinationRoot()+'/client/'+this.props.appName;
+            moduleName = getNgModuleName(dirname);
 
-
-            while (true) {
-                stat = fs.existsSync(dirname+'/module.coffee');
-                if (stat){
-                    content = fs.readFileSync(dirname+'/module.coffee', 'utf-8');
-                    break;
-                }
-                dirname = path.dirname(dirname);
-                if (dirname == '/') break;
-            }
-            if (!content){
-                this.log(yosay(chalk.red(
-                    "Opps! Cant find module.coffee file=("
-                )));
-                process.exit(1);
-            }
-            content = content.split('\n')
-            for(var i in content){
-                line = content[i];
-                if (line.indexOf('angular.module')==0){
-                    line = line.replace('angular.module','').split(',');
-                    moduleName = line[0];
-                    moduleName = moduleName.replace(/'/g,'').replace(/"/g,'').replace(/ /g,'');
-                    break;
-                }
-            }
             if (!moduleName){
                 this.log(yosay(chalk.red(
-                    "Opps! Cant find angular app in module.coffee file=("
+                    "Opps! Cant find angular app in module.coffee file=( Path: ./client/"+this.props.appName
                 )));
-                process.exit(1);
+                return;
             }
 
             var name = this.props.viewName;
@@ -102,20 +135,20 @@ module.exports = yeoman.Base.extend({
     writing: function () {
         mkdirp('./client/'+this.props.appName+"/"+this.props.viewNameLowerCase);
         this.destinationRoot(this.destinationRoot()+'/client/'+this.props.appName+"/"+this.props.viewNameLowerCase);
-        console.log('00000000000000');
+
         this.fs.copyTpl(
             this.templatePath('views.coffee'),
             this.destinationPath('views.coffee'),
             this.props
         );
-        console.log('000000000000001');
+
         this.fs.copyTpl(
             this.templatePath('style.less'),
             this.destinationPath('style.less'),
             this.props
         );
 
-        console.log('000000000000002');
+
         if (!this.props.viewsType){
             this.fs.copyTpl(
                 this.templatePath('view.jade'),
