@@ -21,6 +21,18 @@ html
 		
 		
 		block js_scripts
+			//- Если нужна поддержка googlemaps, то раскомментируйте нижний блок
+				//- запрещаем наглому googlemaps загружать свои шрифты
+				//- по факту, правда, мы запрещаем зугрузку шрифтов из js на fonts.googleapis.com
+				script.
+					(function(){
+					var head = document.getElementsByTagName('head')[0];
+					var insertBefore = head.insertBefore;
+					head.insertBefore = function (newElement, referenceElement) {
+						if (newElement.href && newElement.href.indexOf('https://fonts.googleapis.com') === 0) {return;}
+						insertBefore.call(head, newElement, referenceElement);
+					};})();
+				script(src='https://maps.googleapis.com/maps/api/js?sensor=false')
 			if $isDevPlatform
 				// bower:js
 				// endbower
@@ -35,7 +47,6 @@ html
 					"type": "{{CMS_STORAGE.type}}",
 					"server": "{{CMS_STORAGE.server}}"
 				};
-				
 				//- если django нет, то пытаемся подхватить переменные от jade
 				if ( CMS_BASE_URL.indexOf('CMS_BASE_URL') > -1 || CMS_BASE_URL.length == 0 ){
 					CMS_BASE_URL = '#{CMS_BASE_URL}';

@@ -3,13 +3,12 @@ extends ./base.jade
 
 block ng_app
     <%  if (useUiCms) { %>//- подключаем файл с ngResource-моделями от cms и другие библиотеки, css
-    //- TODO: сгребти js и css файлы от cms в 1 большой js-блоб 
     if $isDevPlatform
         script(src="http://localhost:3000/client/cms_app.js")
-        link(type="text/css", href="http://localhost:3000/client/cms_app.css", rel="stylesheet")
+        link(type="text/css", href="http://localhost:3000/client/cms_app/style.min.css", rel="stylesheet")
     else
+        //- css загружать не надо, он уже внутри cms_app.min.js
         script(src="#{CMS_BASE_URL}/client/cms_app.min.js")
-        link(type="text/css", href="#{CMS_BASE_URL}/client/cms_app.css", rel="stylesheet")
     <% } %>//-
     if $isDevPlatform
         <!-- start auto template tags -->
