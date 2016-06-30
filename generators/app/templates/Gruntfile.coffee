@@ -265,7 +265,7 @@ module.exports = (grunt)->
 				files:[{
 					expand: true,
 					cwd: '__build__/',
-					src: ['**/*.{png,jpg,gif}'],
+					src: ['**/*.{png,jpg,gif}', '**/!*.min.*'],
 					dest: '__build__/'
 				}]
 			}

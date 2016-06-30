@@ -128,11 +128,11 @@ module.exports = yeoman.Base.extend({
                     'angular-bootstrap', 'bootstrap',
                     'angular-ui-router#~0.2.x', 'angular-animate',
                     'angular-gettext', 'components-font-awesome',
-                    'angular-scroll', 'world-flags-sprite',
+                    'angular-scroll',
                     'angular-ui-router-title', 'angular-loading-bar'
                 ];
                 if (!self.props.useUiCms) {
-                    bower_libs.push("https://github.com/gerasev-kirill/ui-flags.git#~0.0.4");
+                    bower_libs.push("https://github.com/gerasev-kirill/ui-flags.git#~0.5.0");
                     bower_libs.push("https://github.com/gerasev-kirill/angular-gettext-lang-picker.git");
                 }
             } else {

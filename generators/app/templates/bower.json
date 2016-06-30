@@ -24,9 +24,7 @@
             "main": []
         },<% } %>
         "world-flags-sprite": {
-            "main": [
-                "stylesheets/flags16.css"
-            ]
+            "main": []
         },
         "components-font-awesome":{
             "main":[
