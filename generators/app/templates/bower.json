@@ -30,7 +30,16 @@
             "main":[
               "css/font-awesome.min.css"
             ]
+        },<% if (useCustomUiBootstrap) { %>
+        "angular-bootstrap": {
+            "main":[
+                "../angular-bootstrap-custom/ui-bootstrap-custom-tpls-1.3.3.min.js"
+            ]
         },
+        "angular-bootstrap-custom":{
+            "main":[]
+        },
+        <% } %>
         "less.js":{
             "main":[]
         }

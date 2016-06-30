@@ -38,6 +38,11 @@ module.exports = yeoman.Base.extend({
         }];
         var prompts_angular = [{
             type: 'confirm',
+            name: 'useCustomUiBootstrap',
+            message: 'Use custom ui.bootstrap (y - custom with small footprint, n - default build)? ',
+            default: true
+        }, {
+            type: 'confirm',
             name: 'useUiCms',
             message: 'Use ui.cms (you must run loopback_cms on your localhost)?',
             default: true
@@ -126,14 +131,17 @@ module.exports = yeoman.Base.extend({
             if (self.props.useAngular) {
                 bower_libs = [
                     'angular-bootstrap', 'bootstrap',
-                    'angular-ui-router#~0.2.x', 'angular-animate',
+                    'angular-ui-router#0.3.x', 'angular-animate',
                     'angular-gettext', 'components-font-awesome',
                     'angular-scroll',
                     'angular-ui-router-title', 'angular-loading-bar'
                 ];
                 if (!self.props.useUiCms) {
-                    bower_libs.push("https://github.com/gerasev-kirill/ui-flags.git#~0.5.0");
-                    bower_libs.push("https://github.com/gerasev-kirill/angular-gettext-lang-picker.git");
+                    bower_libs.push("https://github.com/gerasev-kirill/ui-flags.git");
+                    bower_libs.push("https://github.com/gerasev-kirill/angular-gettext-lang-picker.git#0.3.5");
+                }
+                if (self.props.useCustomUiBootstrap){
+                    bower_libs.push("https://github.com/gerasev-kirill/uib-custom-build.git");
                 }
             } else {
                 bower_libs = [
