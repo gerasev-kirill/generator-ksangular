@@ -21,18 +21,6 @@ html
 		
 		
 		block js_scripts
-			//- Если нужна поддержка googlemaps, то раскомментируйте и сдвиньте влево нижний блок
-				//- запрещаем наглому googlemaps загружать свои шрифты
-				//- по факту, правда, мы запрещаем зугрузку шрифтов из js на fonts.googleapis.com
-				script.
-					(function(){
-					var head = document.getElementsByTagName('head')[0];
-					var insertBefore = head.insertBefore;
-					head.insertBefore = function (newElement, referenceElement) {
-						if (newElement.href && newElement.href.indexOf('https://fonts.googleapis.com') === 0) {return;}
-						insertBefore.call(head, newElement, referenceElement);
-					};})();
-				script(src='https://maps.googleapis.com/maps/api/js?sensor=false')
 			if $isDevPlatform
 				// bower:js
 				// endbower
