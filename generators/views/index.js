@@ -174,7 +174,7 @@ module.exports = yeoman.Base.extend({
             if (this.props.viewsType.indexOf('a')>-1){
                 if (!this.props.viewsType.indexOf('e')>-1){
                     this.fs.copyTpl(
-                        this.templatePath(viewNames[n]),
+                        this.templatePath(viewNames['e']+'.jade'),
                         this.destinationPath(this.props.viewNameLowerCase + 'EditView.jade'),
                         this.props
                     );
